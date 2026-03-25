@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 class Bogie {
     String name;
@@ -29,6 +30,109 @@ public class Main {
 
         System.out.println("\nSystem ready for operations...");
 
+        System.out.println("===========================");
+        System.out.println("Add Passenger Bogies to Train (UC2)");
+        System.out.println("===========================");
+
+        List<String> passengerBogies = new ArrayList<>();
+
+        passengerBogies.add("Sleeper");
+        passengerBogies.add("AC Chair");
+        passengerBogies.add("First Class");
+
+        System.out.println("\nAfter adding Bogies: ");
+        System.out.println("Passenger Bogies: " + passengerBogies);
+
+        passengerBogies.remove("AC Chair");
+        System.out.println("\nAfter removing 'AC Chair': ");
+        System.out.println("Passenger Bogies: " + passengerBogies);
+
+        System.out.println("\nChecking if 'Sleeper' exists: ");
+        System.out.println("Contains Sleeper? : " + passengerBogies.contains("Sleeper"));
+
+        System.out.println("\nFinal Train Passenger Consist: ");
+        System.out.println(passengerBogies);
+
+        System.out.println("\nCRUD operations(UC2) completed successfully...");
+
+        System.out.println("\n\n===========================");
+        System.out.println("Track Unique Bogie IDs (UC3)");
+        System.out.println("===========================\n");
+
+        Set<String> bogiesSet = new HashSet<>();
+        bogiesSet.add("BG101");
+        bogiesSet.add("BG102");
+        bogiesSet.add("BG103");
+        bogiesSet.add("BG104");
+        bogiesSet.add("BG101");
+        bogiesSet.add("BG102");
+
+        System.out.println("Bogie IDs After Insertion: ");
+        System.out.println(bogiesSet);
+
+        System.out.println("\nNote:\nDuplicates are automatically ignored by the HashSet.\n");
+
+        System.out.println("Uniqueness validation completed... (UC3)");
+
+        System.out.println("\n\n=======================================");
+        System.out.println("  Maintain Ordered Bogie Consist (UC4)");
+        System.out.println("========================================\n");
+
+        trainConsist.add("Engine");
+        trainConsist.add("Sleeper");
+        trainConsist.add("AC");
+        trainConsist.add("Cargo");
+        trainConsist.add("Guard");
+
+        System.out.println("Initial Train Consist: ");
+        System.out.println(trainConsist);
+
+        trainConsist.add(2, "Pantry Car");
+        System.out.println("\nAfter Inserting 'Pantry Car' at position 2: ");
+        System.out.println(trainConsist);
+
+        trainConsist.removeFirst();
+        trainConsist.removeLast();
+        System.out.println("\nAfter removing First and Last Bogie: ");
+        System.out.println(trainConsist);
+
+        System.out.println("\nOrdered consist operations completed... (UC4)");
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Preserve Insertion Order of Bogies (UC5)");
+        System.out.println("=========================================\n");
+
+        Set<String> formation = new LinkedHashSet<>();
+        formation.add("Engine");
+        formation.add("Sleeper");
+        formation.add("Cargo");
+        formation.add("Guard");
+        formation.add("Guard");
+        formation.add("Cargo");
+
+        System.out.println("Final Train Formation:");
+        System.out.println(formation);
+
+        System.out.println("\nNote:\nLinkedHashSet preserves the insertion order and removes duplicates automatically.\n");
+        System.out.println("Formation setup completed... (UC5)");
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Map Bogie to Capacity (HashMap) (UC6)");
+        System.out.println("========================================\n");
+
+        Map<String, Integer> capacityMap = new HashMap<>();
+        capacityMap.put("First Class", 24);
+        capacityMap.put("Cargo", 120);
+        capacityMap.put("Sleeper", 72);
+        capacityMap.put("AC Chair", 56);
+
+        System.out.println("Bogie Capacity Details:");
+        for (Map.Entry<String, Integer> entry : capacityMap.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
+
+        System.out.println("\nBogie-capacity mapping completed... (UC6)");
+
         System.out.println("\n\n========================================");
         System.out.println("  Sort Bogies by Capacity (UC7)");
         System.out.println("========================================\n");
@@ -52,5 +156,26 @@ public class Main {
         }
 
         System.out.println("\nSorting operation completed... (UC7)");
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Filter Passenger Bogies (UC8)");
+        System.out.println("========================================\n");
+
+        System.out.println("All Passenger Bogies:");
+        for (Bogie b : bogies) {
+            System.out.println(b);
+        }
+
+        List<Bogie> filteredBogies = bogies
+                .stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
+
+        System.out.println("\nFiltered Bogies (Capacity > 60):");
+        for (Bogie b : filteredBogies) {
+            System.out.println(b);
+        }
+
+        System.out.println("\nFiltering operation completed... (UC8)");
     }
 }
