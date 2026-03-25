@@ -197,5 +197,23 @@ public class Main {
         }
 
         System.out.println("\nGrouping operation completed... (UC9)");
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Count Total Seats in Train (UC10)");
+        System.out.println("========================================\n");
+
+        int totalSeats = bogies
+                .stream()
+                .map(b -> b.capacity)
+                .reduce(0, Integer::sum);
+
+        System.out.println("Passenger Bogies:");
+        for (Bogie b : bogies) {
+            System.out.println(b);
+        }
+
+        System.out.println("\nTotal Seating Capacity of Train: " + totalSeats);
+
+        System.out.println("\nAggregation operation completed... (UC10)");
     }
 }
