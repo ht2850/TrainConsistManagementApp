@@ -142,6 +142,7 @@ public class Main {
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 56));
         bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 72));
 
         System.out.println("Before Sorting:");
         for (Bogie b : bogies) {
@@ -177,5 +178,24 @@ public class Main {
         }
 
         System.out.println("\nFiltering operation completed... (UC8)");
+
+        System.out.println("\n\n========================================");
+        System.out.println("  Group Bogies by Type (UC9)");
+        System.out.println("========================================\n");
+
+        Map<String, List<Bogie>> groupedBogies = bogies
+                .stream()
+                .collect(Collectors.groupingBy(b -> b.name));
+
+        System.out.println("Grouped Bogies:");
+
+        for (Map.Entry<String, List<Bogie>> entry : groupedBogies.entrySet()) {
+            System.out.println("\n" + entry.getKey() + ":");
+            for (Bogie b : entry.getValue()) {
+                System.out.println(b);
+            }
+        }
+
+        System.out.println("\nGrouping operation completed... (UC9)");
     }
 }
