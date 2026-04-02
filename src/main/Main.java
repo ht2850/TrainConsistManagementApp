@@ -1,65 +1,58 @@
-import model.PassengerBogie;
 import model.GoodsBogie;
+import model.PassengerBogie;
 import model.SafetyValidator;
-import model.InvalidCapacityException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+
     public static void main(String[] args) {
 
-        // --- Create Passenger Bogies ---
-        List<PassengerBogie> passengerBogies = new ArrayList<>();
-        try {
-            passengerBogies.add(new PassengerBogie("Sleeper", 72));
-            passengerBogies.add(new PassengerBogie("AC Chair", 60));
-            passengerBogies.add(new PassengerBogie("First Class", 0)); // This will throw exception
-        } catch (InvalidCapacityException e) {
-            System.out.println("Error creating passenger bogie: " + e.getMessage());
+        System.out.println("=== Train Consist Management App ===");
+
+        // UC13: Performance Comparison
+        List<GoodsBogie> goodsBogies = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            goodsBogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+            goodsBogies.add(new GoodsBogie("Box", "Coal"));
         }
 
-        System.out.println("Passenger Bogies:");
-        for (PassengerBogie bogie : passengerBogies) {
-            System.out.println(" - " + bogie);
-        }
-
-        // --- Create Goods Bogies ---
-        List<GoodsBogie> goodsBogies = List.of(
-                new GoodsBogie("Cylindrical", "Petroleum"),
-                new GoodsBogie("Box", "Coal"),
-                new GoodsBogie("Open", "Grain")
-        );
-
-        // --- Safety Validation ---
-        boolean trainSafe = SafetyValidator.isTrainSafe(goodsBogies);
-        System.out.println("Goods bogies safe: " + trainSafe);
-
-        // --- UC13 Performance Benchmarking (Loop vs Stream) ---
-        int threshold = 60;
-
-        // Loop-based
+        // Loop-based filtering
         long startLoop = System.nanoTime();
-        List<PassengerBogie> filteredLoop = new ArrayList<>();
-        for (PassengerBogie b : passengerBogies) {
-            if (b.getCapacity() > threshold) {
-                filteredLoop.add(b);
+        List<GoodsBogie> loopFiltered = new ArrayList<>();
+        for (GoodsBogie b : goodsBogies) {
+            if (b.getCapacity() > 60) {
+                loopFiltered.add(b);
             }
         }
         long endLoop = System.nanoTime();
-        System.out.println("Loop filtering took: " + (endLoop - startLoop) + " ns");
+        System.out.println("Loop filtering time: " + (endLoop - startLoop) + " ns");
 
-        // Stream-based
+        // Stream-based filtering
         long startStream = System.nanoTime();
-        List<PassengerBogie> filteredStream = passengerBogies.stream()
-                .filter(b -> b.getCapacity() > threshold)
+        List<GoodsBogie> streamFiltered = goodsBogies.stream()
+                .filter(b -> b.getCapacity() > 60)
                 .toList();
         long endStream = System.nanoTime();
-        System.out.println("Stream filtering took: " + (endStream - startStream) + " ns");
+        System.out.println("Stream filtering time: " + (endStream - startStream) + " ns");
 
-        // Verify results match
-        System.out.println("Loop and Stream results match: " + (filteredLoop.size() == filteredStream.size()));
+        // UC14: Handle Invalid PassengerBogie Capacity
+        try {
+            PassengerBogie p1 = new PassengerBogie("Sleeper", 50);
+            PassengerBogie p2 = new PassengerBogie("AC Chair", -5); // Invalid
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
 
-        System.out.println("Program continues safely...");
+        // UC15: Safe Cargo Assignment using try-catch-finally
+        GoodsBogie g1 = new GoodsBogie("Rectangular", null);
+        try {
+            g1.assignCargo("Petroleum"); // unsafe assignment
+        } catch (RuntimeException e) {
+            System.out.println("Caught exception: " + e.getMessage());
+        } finally {
+            System.out.println("Cargo assignment validation completed.");
+        }
     }
 }

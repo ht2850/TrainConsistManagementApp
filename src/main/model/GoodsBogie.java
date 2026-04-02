@@ -1,23 +1,12 @@
 package model;
 
 public class GoodsBogie {
-
     private String type;
-    private String cargo;   // used for safety checks
-    private int capacity;   // used for performance tests
+    private String cargo;
 
-    // Constructor for safety tests
     public GoodsBogie(String type, String cargo) {
         this.type = type;
         this.cargo = cargo;
-        this.capacity = 0; // default capacity
-    }
-
-    // Constructor for performance tests
-    public GoodsBogie(String type, int capacity) {
-        this.type = type;
-        this.capacity = capacity;
-        this.cargo = ""; // no cargo for performance tests
     }
 
     public String getType() {
@@ -29,15 +18,15 @@ public class GoodsBogie {
     }
 
     public int getCapacity() {
-        return capacity;
+        // Simplified capacity for UC13 benchmarking
+        return 100;
     }
 
-    @Override
-    public String toString() {
-        if (!cargo.isEmpty()) {
-            return type + "(" + cargo + ")";
-        } else {
-            return type + "(capacity=" + capacity + ")";
+    // UC15: Safe cargo assignment
+    public void assignCargo(String cargo) {
+        if ("Rectangular".equals(type) && "Petroleum".equals(cargo)) {
+            throw new CargoSafetyException("Cannot assign petroleum to rectangular bogie!");
         }
+        this.cargo = cargo;
     }
 }
