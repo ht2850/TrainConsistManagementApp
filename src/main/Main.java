@@ -1,42 +1,65 @@
+import model.PassengerBogie;
 import model.GoodsBogie;
+import model.SafetyValidator;
+import model.InvalidCapacityException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Main {
-
     public static void main(String[] args) {
 
-        // Step 1: Prepare dataset
-        List<GoodsBogie> bogies = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
-            bogies.add(new GoodsBogie("Goods", 50 + i % 100)); // capacities 50-149
+        // --- Create Passenger Bogies ---
+        List<PassengerBogie> passengerBogies = new ArrayList<>();
+        try {
+            passengerBogies.add(new PassengerBogie("Sleeper", 72));
+            passengerBogies.add(new PassengerBogie("AC Chair", 60));
+            passengerBogies.add(new PassengerBogie("First Class", 0)); // This will throw exception
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error creating passenger bogie: " + e.getMessage());
         }
 
-        // ---------------- Loop-Based Filtering ----------------
+        System.out.println("Passenger Bogies:");
+        for (PassengerBogie bogie : passengerBogies) {
+            System.out.println(" - " + bogie);
+        }
+
+        // --- Create Goods Bogies ---
+        List<GoodsBogie> goodsBogies = List.of(
+                new GoodsBogie("Cylindrical", "Petroleum"),
+                new GoodsBogie("Box", "Coal"),
+                new GoodsBogie("Open", "Grain")
+        );
+
+        // --- Safety Validation ---
+        boolean trainSafe = SafetyValidator.isTrainSafe(goodsBogies);
+        System.out.println("Goods bogies safe: " + trainSafe);
+
+        // --- UC13 Performance Benchmarking (Loop vs Stream) ---
+        int threshold = 60;
+
+        // Loop-based
         long startLoop = System.nanoTime();
-        List<GoodsBogie> loopFiltered = new ArrayList<>();
-        for (GoodsBogie b : bogies) {
-            if (b.getCapacity() > 60) {
-                loopFiltered.add(b);
+        List<PassengerBogie> filteredLoop = new ArrayList<>();
+        for (PassengerBogie b : passengerBogies) {
+            if (b.getCapacity() > threshold) {
+                filteredLoop.add(b);
             }
         }
         long endLoop = System.nanoTime();
-        long loopDuration = endLoop - startLoop;
-        System.out.println("Loop-Based Filtering: " + loopFiltered.size() + " bogies, Time = " + loopDuration + " ns");
+        System.out.println("Loop filtering took: " + (endLoop - startLoop) + " ns");
 
-        // ---------------- Stream-Based Filtering ----------------
+        // Stream-based
         long startStream = System.nanoTime();
-        List<GoodsBogie> streamFiltered = bogies.stream()
-                .filter(b -> b.getCapacity() > 60)
-                .collect(Collectors.toList());
+        List<PassengerBogie> filteredStream = passengerBogies.stream()
+                .filter(b -> b.getCapacity() > threshold)
+                .toList();
         long endStream = System.nanoTime();
-        long streamDuration = endStream - startStream;
-        System.out.println("Stream-Based Filtering: " + streamFiltered.size() + " bogies, Time = " + streamDuration + " ns");
+        System.out.println("Stream filtering took: " + (endStream - startStream) + " ns");
 
-        // ---------------- Verification ----------------
-        boolean resultsMatch = loopFiltered.size() == streamFiltered.size();
-        System.out.println("Do loop and stream results match? " + resultsMatch);
+        // Verify results match
+        System.out.println("Loop and Stream results match: " + (filteredLoop.size() == filteredStream.size()));
+
+        System.out.println("Program continues safely...");
     }
 }
