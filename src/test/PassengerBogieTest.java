@@ -1,6 +1,7 @@
+package test;
 
-import model.InvalidCapacityException;
-import model.PassengerBogie;
+import main.model.InvalidCapacityException;
+import main.model.PassengerBogie;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

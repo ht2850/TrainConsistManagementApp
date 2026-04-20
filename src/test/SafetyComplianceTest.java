@@ -1,5 +1,7 @@
-import model.GoodsBogie;
-import model.SafetyValidator;
+package test;
+
+import main.model.GoodsBogie;
+import main.model.SafetyValidator;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
