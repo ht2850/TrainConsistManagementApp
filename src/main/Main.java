@@ -1,5 +1,6 @@
 package main;
 
+import main.model.BogieSearch;
 import main.model.PassengerSorter;
 
 import java.util.Arrays;
@@ -10,13 +11,17 @@ public class Main {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // UC17: Sort Bogie Names using Arrays.sort()
-        String[] bogieTypes = {"Sleeper", "AC Chair", "First Class", "General", "Luxury"};
+        // UC18: Linear Search for Bogie ID
+        String[] bogieIds = {"BG101","BG205","BG309","BG412","BG550"};
 
-        System.out.println("Before Sorting: " + Arrays.toString(bogieTypes));
+        String searchKey = "BG309";
 
-        Arrays.sort(bogieTypes);
+        boolean found = BogieSearch.linearSearch(bogieIds, searchKey);
 
-        System.out.println("After Sorting: " + Arrays.toString(bogieTypes));
+        if (found) {
+            System.out.println("Bogie ID " + searchKey + " found.");
+        } else {
+            System.out.println("Bogie ID " + searchKey + " not found.");
+        }
     }
 }
