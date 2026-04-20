@@ -2,21 +2,21 @@ package main;
 
 import main.model.PassengerSorter;
 
+import java.util.Arrays;
+
 public class Main {
 
     public static void main(String[] args) {
 
         System.out.println("=== Train Consist Management App ===");
 
-        // UC16: Bubble Sort on Passenger Bogie Capacities
-        int[] capacities = {72, 56, 24, 70, 60};
+        // UC17: Sort Bogie Names using Arrays.sort()
+        String[] bogieTypes = {"Sleeper", "AC Chair", "First Class", "General", "Luxury"};
 
-        System.out.print("Before Sorting: ");
-        PassengerSorter.printArray(capacities);
+        System.out.println("Before Sorting: " + Arrays.toString(bogieTypes));
 
-        PassengerSorter.bubbleSort(capacities);
+        Arrays.sort(bogieTypes);
 
-        System.out.print("After Sorting: ");
-        PassengerSorter.printArray(capacities);
+        System.out.println("After Sorting: " + Arrays.toString(bogieTypes));
     }
 }
